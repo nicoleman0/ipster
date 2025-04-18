@@ -212,7 +212,7 @@ if __name__ == "__main__":
             break
 
         if not ipinfo_client.is_valid_ip(ip):
-            print("❌ Invalid IP address format.")
+            print("Invalid IP address format.")
             continue
 
         result = ipinfo_client.get_ip_info(ip)
@@ -230,6 +230,6 @@ if __name__ == "__main__":
                 if ipinfo_client.write_ip_info_to_json(ip, filename):
                     print(f"✅ Successfully saved to {filename}")
                 else:
-                    print("❌ Failed to save JSON file")
+                    print("Failed to save JSON file")
         else:
-            print("❌ Failed to retrieve IP information.")
+            print("Failed to retrieve IP information.")
