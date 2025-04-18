@@ -188,8 +188,9 @@ class IPInfo:
 if __name__ == "__main__":
     # Create ASCII art title
     fig = Figlet(font='slant')
-    print(fig.renderText('IPScan v1.0'))
+    print(fig.renderText('IPInfoScan v1.0'))
     print("=" * 50)
+    print("Created by @nicoleman0")
 
     ipinfo_client = IPInfo(access_token)
     print("Enter an IP address to get detailed information (or 'quit' to exit)")
@@ -197,7 +198,7 @@ if __name__ == "__main__":
     while True:
         ip = input("\nIP Address > ")
         if ip.lower() == 'quit':
-            print("Thank you for using IPScan.")
+            print("Thank you for using this tool.")
             break
 
         if not ipinfo_client.is_valid_ip(ip):
