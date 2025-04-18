@@ -79,15 +79,7 @@ class IPInfo:
             return None
 
     def write_ip_info_to_json(self, ip: str, filename: str) -> bool:
-        """Write IP information to a JSON file.
-
-        Args:
-            ip (str): The IP address to look up
-            filename (str): The JSON file to write the information to
-
-        Returns:
-            bool: True if successful, False otherwise
-        """
+        """Write IP information to a JSON file."""
         details = self.get_ip_info(ip)
         if not details:
             return False
@@ -102,37 +94,8 @@ class IPInfo:
             self.logger.error(f"Error writing to JSON file {filename}: {e}")
             return False
 
-    def get_location(self, ip: str) -> Optional[Dict[str, str]]:
-        """Get location information for an IP address.
-
-        Args:
-            ip (str): The IP address to look up
-
-        Returns:
-            Optional[Dict[str, str]]: Dictionary containing location information or None if error occurs
-        """
-        details = self.get_ip_info(ip)
-        if not details:
-            return None
-
-        return {
-            'city': details.get('city', 'Unknown'),
-            'region': details.get('region', 'Unknown'),
-            'country': details.get('country', 'Unknown'),
-            'loc': details.get('loc', 'Unknown'),
-            'timezone': details.get('timezone', 'Unknown')
-        }
-
     def batch_process(self, ips: list[str], output_dir: str) -> Dict[str, bool]:
-        """Process multiple IP addresses and save results to individual files.
-
-        Args:
-            ips (list[str]): List of IP addresses to process
-            output_dir (str): Directory to save the output files
-
-        Returns:
-            Dict[str, bool]: Dictionary mapping IP addresses to processing success status
-        """
+        """Process multiple IP addresses and save results to individual files."""
         os.makedirs(output_dir, exist_ok=True)
         results = {}
 
@@ -147,7 +110,7 @@ class IPInfo:
 
         return results
 
-    def format_output(self, ip_info: Dict, location_info: Optional[Dict[str, str]] = None) -> str:
+    def format_output(self, ip_info: Dict) -> str:
         """Format IP information into a readable string.
 
         Args:
@@ -188,17 +151,17 @@ class IPInfo:
 if __name__ == "__main__":
     # Create ASCII art title
     fig = Figlet(font='slant')
-    print(fig.renderText('IPInfoScan v1.0'))
-    print("=" * 50)
+    print(fig.renderText('ipster v1.0'))
+    print("=" * 55)
     print("Created by @nicoleman0")
 
     ipinfo_client = IPInfo(access_token)
     print("Enter an IP address to get detailed information (or 'quit' to exit)")
 
     while True:
-        ip = input("\nIP Address > ")
-        if ip.lower() == 'quit':
-            print("Thank you for using this tool.")
+        ip = input("\nip > ")
+        if ip.lower() == 'quit' or ip.lower() == 'exit' or ip.lower() == 'q':
+            print("Exiting...")
             break
 
         if not ipinfo_client.is_valid_ip(ip):

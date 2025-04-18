@@ -1,6 +1,6 @@
 # IPInfoScan
 
-A Python tool for retrieving and analyzing IP address information using the ipinfo.io API.
+ipster - a Python tool for retrieving and analyzing IP address information using the ipinfo.io API.
 
 ## Features
 
@@ -12,19 +12,19 @@ A Python tool for retrieving and analyzing IP address information using the ipin
 ## Prerequisites
 
 - Python 3.x
-- ipinfo.io API token
+- [ipinfo.io API token](https://ipinfo.io/developers) (free)
 
 ## Installation
 
-1. Clone the repository
+1. Clone or download the repository
 
-1. Install required packages:
+2. Install the required packages:
 
 ```bash
 pip install ipinfo python-dotenv pyfiglet requests
 ```
 
-1. Create a `.env` file in the project root and add your IPInfo API token:
+1. You *must* create a `.env` file in the **project root**, then add your IPInfo API token:
 
 ```plaintext
 IPINFO_TOKEN=your_token_here
@@ -32,14 +32,14 @@ IPINFO_TOKEN=your_token_here
 
 ## Usage
 
-Run the script:
+Run the script with:
 
 ```bash
-python ip.py
+python3 ipster.py
 ```
 
-The interactive CLI will prompt you to enter IP addresses and provide options to view and save the information.
+The scanner will prompt you to enter IP addresses you wish to scan and provide options to view and save the information afterwards.
 
 ## License
 
-See the [LICENSE](LICENSE) file for details.
+See the [LICENSE](LICENSE) file.
