@@ -7,6 +7,7 @@ import logging
 from typing import Dict, Optional
 import socket
 import re
+from pyfiglet import Figlet
 
 # Configure logging
 logging.basicConfig(
@@ -88,30 +89,6 @@ class IPInfo:
             self.logger.error(f"An unexpected error occurred: {e}")
             return None
 
-    def write_ip_info_to_file(self, ip: str, filename: str) -> bool:
-        """Write IP information to a text file.
-
-        Args:
-            ip (str): The IP address to look up
-            filename (str): The file to write the information to
-
-        Returns:
-            bool: True if successful, False otherwise
-        """
-        details = self.get_ip_info(ip)
-        if not details:
-            return False
-
-        try:
-            with open(filename, "w") as file:
-                for key, value in details.items():
-                    file.write(f"{key}: {value}\n")
-            self.logger.info(f"Successfully wrote IP info to file: {filename}")
-            return True
-        except IOError as e:
-            self.logger.error(f"Error writing to file {filename}: {e}")
-            return False
-
     def write_ip_info_to_json(self, ip: str, filename: str) -> bool:
         """Write IP information to a JSON file.
 
@@ -181,28 +158,78 @@ class IPInfo:
 
         return results
 
+    def format_output(self, ip_info: Dict, location_info: Optional[Dict[str, str]] = None) -> str:
+        """Format IP information into a readable string.
+
+        Args:
+            ip_info (Dict): Dictionary containing IP information
+            location_info (Optional[Dict[str, str]]): Dictionary containing location information
+
+        Returns:
+            str: Formatted string containing IP information
+        """
+        output = []
+        output.append("=" * 50)
+        output.append("IP Information Summary")
+        output.append("=" * 50)
+
+        # Basic IP info
+        output.append(f"IP Address: {ip_info.get('ip', 'Unknown')}")
+        output.append(f"Hostname: {ip_info.get('hostname', 'Unknown')}")
+        output.append(f"Organization: {ip_info.get('org', 'Unknown')}")
+
+        # Location information
+        output.append("\nLocation Details:")
+        output.append(f"City: {ip_info.get('city', 'Unknown')}")
+        output.append(f"Region: {ip_info.get('region', 'Unknown')}")
+        output.append(f"Country: {ip_info.get('country', 'Unknown')}")
+        output.append(f"Location: {ip_info.get('loc', 'Unknown')}")
+        output.append(f"Timezone: {ip_info.get('timezone', 'Unknown')}")
+
+        # Additional details if available
+        if ip_info.get('postal'):
+            output.append(f"Postal Code: {ip_info['postal']}")
+        if ip_info.get('asn'):
+            output.append(f"ASN: {ip_info['asn']}")
+
+        output.append("=" * 50)
+        return "\n".join(output)
+
 
 if __name__ == "__main__":
+    # Create ASCII art title
+    fig = Figlet(font='slant')
+    print(fig.renderText('IPScan v1.0'))
+    print("=" * 50)
+
     ipinfo_client = IPInfo(access_token)
+    print("Enter an IP address to get detailed information (or 'quit' to exit)")
 
     while True:
-        ip = input("Enter the IP address (or 'quit' to exit): ")
+        ip = input("\nIP Address > ")
         if ip.lower() == 'quit':
+            print("Thank you for using IPScan.")
             break
 
         if not ipinfo_client.is_valid_ip(ip):
-            print("Invalid IP address format.")
+            print("❌ Invalid IP address format.")
             continue
 
         result = ipinfo_client.get_ip_info(ip)
         if result:
-            print("\nIP Information:")
-            print(json.dumps(result, indent=2))
+            formatted_output = ipinfo_client.format_output(result)
+            print(formatted_output)
 
-            # Also show location details
-            location = ipinfo_client.get_location(ip)
-            if location:
-                print("\nLocation Details:")
-                print(json.dumps(location, indent=2))
+            # Ask if user wants to save to JSON
+            save_option = input(
+                "\nWould you like to save this information to a JSON file? (y/n): ")
+            if save_option.lower() == 'y':
+                filename = input("Enter filename (e.g., ip_info.json): ")
+                if not filename.endswith('.json'):
+                    filename += '.json'
+                if ipinfo_client.write_ip_info_to_json(ip, filename):
+                    print(f"✅ Successfully saved to {filename}")
+                else:
+                    print("❌ Failed to save JSON file")
         else:
-            print("Failed to retrieve IP information.")
+            print("❌ Failed to retrieve IP information.")
