@@ -20,32 +20,21 @@ load_dotenv()
 
 access_token = os.getenv("IPINFO_TOKEN")
 if access_token is None:
-    raise ValueError("IPINFO_TOKEN is not set in the environment variables.")
+    raise ValueError("IPINFO_TOKEN is missing. Check your .env file.")
 
 
 class IPInfo:
     def __init__(self, access_token: str):
-        """Initialize IPInfo handler with the API access token.
-
-        Args:
-            access_token (str): IPInfo API access token
-        """
+        """Initialize IPInfo handler with the API access token."""
         self.handler = ipinfo.getHandler(access_token)
         self.logger = logging.getLogger(__name__)
 
     @staticmethod
     def is_valid_ip(ip: str) -> bool:
-        """Validate if the given string is a valid IP address.
-
-        Args:
-            ip (str): IP address to validate
-
-        Returns:
-            bool: True if valid IP address, False otherwise
-        """
-        # IPv4 pattern
+        """Validate if the given string is a valid IP address."""
+        # Regular expressions for IPv4 and IPv6
         ipv4_pattern = r'^(\d{1,3}\.){3}\d{1,3}$'
-        # IPv6 pattern
+
         ipv6_pattern = r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$'
 
         if re.match(ipv4_pattern, ip):
@@ -71,7 +60,7 @@ class IPInfo:
             ip (str): The IP address to look up
 
         Returns:
-            Optional[Dict]: Dictionary containing IP information or None if error occurs
+            Optional[Dict]: Dictionary containing IP information or None
         """
         if not self.is_valid_ip(ip):
             self.logger.error(f"Invalid IP address format: {ip}")
