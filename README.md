@@ -1,6 +1,8 @@
-# IPInfoScan
+# ipster
 
-ipster - a Python tool for retrieving and analyzing IP address information using the ipinfo.io API.
+ipster - is a Python tool for retrieving and analyzing basic IP address information using the ipinfo.io API.
+
+It's like a fast and simple version of whois.
 
 ## Features
 
