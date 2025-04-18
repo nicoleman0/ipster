@@ -26,7 +26,7 @@ It's like a fast and simple version of whois.
 pip install ipinfo python-dotenv pyfiglet requests
 ```
 
-1. You *must* create a `.env` file in the **project root**, then add your IPInfo API token:
+You *must* create a `.env` file in the **project root**, then add your IPInfo API token:
 
 ```plaintext
 IPINFO_TOKEN=your_token_here
